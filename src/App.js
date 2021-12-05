@@ -1,25 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import Form from './components/form';
+import List from './components/list';
+import { connect } from 'react-redux'
+import { deleteAll, persistTask } from './redux/action/addTask.actions';
+import { useEffect } from 'react';
 
-function App() {
+const App =({deleteAll, persistTask})=> {
+  useEffect(()=>{
+     persistTask()
+  },[persistTask]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1> Todo List</h1>
+      <Form/>
+      <List/>
+      <div>
+        <button 
+        className="delete" 
+        onClick={deleteAll}
         >
-          Learn React
-        </a>
-      </header>
+          Delete All
+        </button>
+      </div>
     </div>
   );
 }
+const mapDispatchToProps = dispatch =>({
+  deleteAll : () => dispatch(deleteAll()),
+  persistTask : () => dispatch(persistTask())
 
-export default App;
+})
+export default connect(null,mapDispatchToProps)(App);
